@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu - BrewUp</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../pages.css">
+  <link rel="stylesheet" href="menu.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script type="module" src="../firebase.js"></script>
+  <script type="module" src="../auth-ui.js"></script>
+</head>
+<body>
+  <!-- Modal de escolha de tipo de pedido (aparece ao entrar na página) -->
+  <div id="order-type-modal" class="order-type-modal" style="display:flex;">
+    <div class="order-type-modal-content">
+      <h3>Como deseja pedir?</h3>
+      <button class="order-type-btn" data-type="mesa">Mesa</button>
+      <button class="order-type-btn" data-type="delivery">Delivery</button>
+    </div>
+  </div>
+
+  <!-- Navbar will be loaded here -->
+  <div id="navbar-container"></div>
+
+  <!-- Ícone do carrinho no topo -->
+  <div id="cart-icon-container">
+    <button id="cart-icon-btn">
+      <i class="fas fa-shopping-cart"></i>
+      <span id="cart-count" class="cart-count">0</span>
+    </button>
+  </div>
+
+  <main class="page-content" id="menu-main-content" style="display:none;">
+    <div class="page-header">
+      <h1 class="page-title">Nosso Menu</h1>
+      <p class="page-subtitle">Descubra nossos sabores especialmente preparados para você</p>
+    </div>
+    
+    <div class="menu-container">
+      <section class="menu-section">
+        <h2><i class="fas fa-mug-hot"></i> Cafés Quentes</h2>
+        <div class="carousel-container">
+          <button class="carousel-button prev"><i class="fas fa-chevron-left"></i></button>
+          <div class="menu-items carousel-items">
+            <div class="menu-item">
+              <div class="menu-item-image">
+                <img src="../img/espresso.webp" alt="Espresso">
+                <div class="menu-item-badge">Clássico</div>
+              </div>
+              <div class="menu-item-content">
+                <h3>Espresso</h3>
+                <p>Café puro e intenso</p>
+                <div class="menu-item-footer">
+                  <span class="price"><i class="fas fa-tag"></i> R$ 5,00</span>
+                  <button class="add-to-cart" data-item='{"name": "Espresso", "price": 5.00}'>
+                    <i class="fas fa-cart-plus"></i> Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-image">
+                <img src="../img/cap.webp" alt="Cappuccino">
+                <div class="menu-item-badge">Popular</div>
+              </div>
+              <div class="menu-item-content">
+                <h3>Cappuccino</h3>
+                <p>Espresso com leite vaporizado e espuma</p>
+                <div class="menu-item-footer">
+                  <span class="price"><i class="fas fa-tag"></i> R$ 8,00</span>
+                  <button class="add-to-cart" data-item='{"name": "Cappuccino", "price": 8.00}'>
+                    <i class="fas fa-cart-plus"></i> Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-image">
+                <img src="../img/latte.webp" alt="Latte">
+                <div class="menu-item-badge">Cremoso</div>
+              </div>
+              <div class="menu-item-content">
+                <h3>Latte</h3>
+                <p>Espresso com leite cremoso</p>
+                <div class="menu-item-footer">
+                  <span class="price"><i class="fas fa-tag"></i> R$ 7,50</span>
+                  <button class="add-to-cart" data-item='{"name": "Latte", "price": 7.50}'>
+                    <i class="fas fa-cart-plus"></i> Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-button next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </section>
+
+      <section class="menu-section">
+        <h2><i class="fas fa-ice-cream"></i> Cafés Gelados</h2>
+        <div class="carousel-container">
+          <button class="carousel-button prev"><i class="fas fa-chevron-left"></i></button>
+          <div class="menu-items carousel-items">
+            <div class="menu-item">
+              <div class="menu-item-image">
+                <img src="../img/cafe gelado.webp" alt="Café Gelado">
+                <div class="menu-item-badge">Refrescante</div>
+              </div>
+              <div class="menu-item-content">
+                <h3>Café Gelado</h3>
+                <p>Café coado gelado com leite</p>
+                <div class="menu-item-footer">
+                  <span class="price"><i class="fas fa-tag"></i> R$ 9,00</span>
+                  <button class="add-to-cart" data-item='{"name": "Café Gelado", "price": 9.00}'>
+                    <i class="fas fa-cart-plus"></i> Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-image">
+                <img src="../img/frap.webp" alt="Frappuccino">
+                <div class="menu-item-badge">Premium</div>
+              </div>
+              <div class="menu-item-content">
+                <h3>Frappuccino</h3>
+                <p>Bebida gelada batida com café</p>
+                <div class="menu-item-footer">
+                  <span class="price"><i class="fas fa-tag"></i> R$ 12,00</span>
+                  <button class="add-to-cart" data-item='{"name": "Frappuccino", "price": 12.00}'>
+                    <i class="fas fa-cart-plus"></i> Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-button next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </section>
+
+      <section class="menu-section">
+        <h2><i class="fas fa-cookie"></i> Doces</h2>
+        <div class="carousel-container">
+          <button class="carousel-button prev"><i class="fas fa-chevron-left"></i></button>
+          <div class="menu-items carousel-items">
+            <div class="menu-item">
+              <div class="menu-item-image">
+                <img src="../img/brownie.webp" alt="Brownie">
+                <div class="menu-item-badge">Caseiro</div>
+              </div>
+              <div class="menu-item-content">
+                <h3>Brownie</h3>
+                <p>Brownie caseiro de chocolate</p>
+                <div class="menu-item-footer">
+                  <span class="price"><i class="fas fa-tag"></i> R$ 6,00</span>
+                  <button class="add-to-cart" data-item='{"name": "Brownie", "price": 6.00}'>
+                    <i class="fas fa-cart-plus"></i> Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-image">
+                <img src="../img/croissant.webp" alt="Croissant">
+                <div class="menu-item-badge">Artesanal</div>
+              </div>
+              <div class="menu-item-content">
+                <h3>Croissant</h3>
+                <p>Croissant folhado na manteiga</p>
+                <div class="menu-item-footer">
+                  <span class="price"><i class="fas fa-tag"></i> R$ 7,00</span>
+                  <button class="add-to-cart" data-item='{"name": "Croissant", "price": 7.00}'>
+                    <i class="fas fa-cart-plus"></i> Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-button next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer will be loaded here -->
+  <div id="footer-container"></div>
+
+  <!-- Modal de escolha de tipo de pedido -->
+  <div id="cart-type-modal" class="cart-type-modal" style="display:none;">
+    <div class="cart-type-modal-content">
+      <h3>Como deseja pedir?</h3>
+      <button class="cart-type-btn" data-type="mesa">Mesa</button>
+      <button class="cart-type-btn" data-type="delivery">Delivery</button>
+      <button class="cart-type-cancel">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal do carrinho -->
+  <div id="cart-modal" class="cart-modal" style="display:none;">
+    <div class="cart-modal-content">
+      <h3>Seu Carrinho</h3>
+      <div id="cart-items-list"></div>
+      <div class="cart-modal-footer">
+        <button id="cart-finish-btn">Finalizar Pedido</button>
+        <button id="cart-close-btn">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão para trocar modo de pedido -->
+  <button id="change-order-type-btn" class="change-order-type-btn">Trocar modo de pedido</button>
+
+  <script type="module" src="../components/loadComponents.js"></script>
+  <script type="module" src="menu.js"></script>
+  <script>
+    localStorage.removeItem('cart');
+  </script>
+</body>
+</html> 

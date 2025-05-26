@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acompanhar Pedido - BrewUp</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../pages.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script type="module" src="../auth-ui.js"></script>
+  <script type="module" src="../components/loadComponents.js"></script>
+  <script type="module" src="delivery.js"></script>
+  <script>
+    function initMap() {
+      // This function will be called when the Maps API is loaded
+      console.log('Google Maps API loaded');
+      // The actual map initialization is handled in delivery.js
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQzf0dhhk1uiGH9LfhG3FkscfyGkusS7s&callback=initMap" async defer></script>
+  <style>
+    .delivery-status-main {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 30px;
+      background: #1a1a1a;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 2.4rem;
+      margin-bottom: 30px;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .delivery-status-card {
+      background: #272727;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
+    #status-info {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #timer-info {
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    #order-info {
+      color: #ffffff;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+    }
+
+    #order-info ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    #order-info li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #order-info li:last-child {
+      border-bottom: none;
+    }
+
+    #contact-info {
+      color: #ffffff;
+      padding: 15px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    #contact-info div {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #contact-info i {
+      color: #d4a373;
+      width: 20px;
+    }
+
+    .map-container {
+      width: 100%;
+      height: 350px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      background: #272727;
+    }
+
+    .delivery-map {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .status-badge.pending { background: #ffd700; color: #000; }
+    .status-badge.accepted { background: #87ceeb; color: #000; }
+    .status-badge.preparing { background: #ff8c00; color: #fff; }
+    .status-badge.sent { background: #4169e1; color: #fff; }
+    .status-badge.delivered { background: #32cd32; color: #fff; }
+
+    .section-title {
+      font-size: 1.2rem;
+      color: #d4a373;
+      margin-bottom: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 800px) {
+      .delivery-status-main {
+        margin: 20px 10px;
+        padding: 20px;
+      }
+
+      .page-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .delivery-status-card {
+        padding: 20px;
+      }
+
+      #status-info {
+        font-size: 1.2rem;
+      }
+
+      .map-container {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+  
+  <main class="delivery-status-main">
+    <h1 class="page-title">Acompanhe seu Pedido</h1>
+    
+    <div id="delivery-status-card" class="delivery-status-card">
+      <div id="status-info"></div>
+      <div id="timer-info"></div>
+      
+      <div class="section-title">
+        <i class="fas fa-receipt"></i> Detalhes do Pedido
+      </div>
+      <div id="order-info"></div>
+      
+      <div class="section-title">
+        <i class="fas fa-user"></i> Informações de Entrega
+      </div>
+      <div id="contact-info"></div>
+    </div>
+    
+    <div class="map-container">
+      <div id="map" class="delivery-map"></div>
+    </div>
+  </main>
+  
+  <div id="footer-container"></div>
+</body>
+</html> 

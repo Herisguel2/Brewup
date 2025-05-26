@@ -1,0 +1,107 @@
+<!-- Navbar Component -->
+<header>
+  <a href="../index.html" class="logo">BrewUp</a>
+  <nav class="nav-links">
+    <a href="../index.html">Início</a>
+    <a href="../menu/menu.html">Menu</a>
+    <a href="../delivery/delivery.html">Delivery</a>
+    <a href="../sobre/sobre.html">Sobre</a>
+    <a href="../suporte/suporte.html">Suporte</a>
+  </nav>
+  <div class="login-container">
+    <!-- User info (hidden by default) -->
+    <div class="user-info">
+      <span class="user-name"></span>
+      <button class="dashboard-btn">Dashboard</button>
+      <button class="logout-btn">Sair</button>
+    </div>
+    <!-- Login button (shown by default) -->
+    <button class="login-button" id="login-toggle-btn">
+      <i class="fas fa-user"></i>
+      Login
+    </button>
+    <div class="login-menu" id="login-menu">
+      <div class="login-header">
+        <h3>Bem-vindo de volta!</h3>
+        <p>Entre com sua conta para continuar</p>
+      </div>
+      <div class="login-feedback" id="login-feedback" style="display:none;"></div>
+      <!-- Login Form -->
+      <form class="login-form" id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="login-email">
+            <i class="fas fa-envelope"></i>
+            Email
+          </label>
+          <input type="email" id="login-email" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">
+            <i class="fas fa-lock"></i>
+            Senha
+          </label>
+          <input type="password" id="login-password" required>
+        </div>
+        <button type="submit" class="submit-button">
+          <i class="fas fa-sign-in-alt"></i>
+          Entrar
+        </button>
+        <div class="error-message" id="login-error"></div>
+      </form>
+      <!-- Register Form (Hidden by default) -->
+      <form class="login-form" id="register-form" style="display: none;" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label for="register-name">
+            <i class="fas fa-user"></i>
+            Nome
+          </label>
+          <input type="text" id="register-name" required>
+        </div>
+        <div class="form-group">
+          <label for="register-email">
+            <i class="fas fa-envelope"></i>
+            Email
+          </label>
+          <input type="email" id="register-email" required>
+        </div>
+        <div class="form-group">
+          <label for="register-password">
+            <i class="fas fa-lock"></i>
+            Senha
+          </label>
+          <input type="password" id="register-password" required>
+        </div>
+        <button type="submit" class="submit-button">
+          <i class="fas fa-user-plus"></i>
+          Criar Conta
+        </button>
+        <div class="error-message" id="register-error"></div>
+      </form>
+      <!-- Reset Password Form (Hidden by default) -->
+      <form class="login-form" id="reset-password-form" style="display: none;" onsubmit="handleResetPassword(event)">
+        <div class="form-group">
+          <label for="reset-email">
+            <i class="fas fa-envelope"></i>
+            Email
+          </label>
+          <input type="email" id="reset-email" required>
+        </div>
+        <button type="submit" class="submit-button">
+          <i class="fas fa-key"></i>
+          Redefinir Senha
+        </button>
+        <div class="error-message" id="reset-error"></div>
+      </form>
+      <div class="login-options">
+        <a href="#" data-toggle-form="reset">
+          <i class="fas fa-key"></i>
+          Esqueceu a senha?
+        </a>
+        <a href="#" data-toggle-form="register">
+          <i class="fas fa-user-plus"></i>
+          Criar conta
+        </a>
+      </div>
+    </div>
+  </div>
+</header> 

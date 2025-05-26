@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | BrewUp</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script type="module" src="auth-ui.js"></script>
+  <script type="module" src="components/loadComponents.js"></script>
+  <style>
+    .dashboard-main {
+      max-width: 1200px;
+      margin: 4rem auto 2rem auto;
+      padding: 2.5rem 1.5rem;
+      background: rgba(30,30,30,0.97);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      min-height: 70vh;
+    }
+    .dashboard-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .dashboard-title {
+      color: var(--accent-color);
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+    .dashboard-desc {
+      font-size: 1.15rem;
+      color: #eee;
+      margin-bottom: 0.5rem;
+    }
+    .dashboard-widgets {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: stretch;
+    }
+    .dashboard-card {
+      background: rgba(40,40,40,0.98);
+      border-radius: 14px;
+      padding: 2rem 1.5rem;
+      min-width: 320px;
+      flex: 1 1 350px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .dashboard-card h2 {
+      color: var(--accent-color);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+    .return-btn {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .return-btn:hover {
+      background: #b48e6a;
+    }
+    /* Order/User Card Styles */
+    .order-card, .user-card {
+      background: rgba(30,30,30,0.95);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .order-header, .user-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .order-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .order-status.pending { background: #ffd700; color: #000; }
+    .order-status.preparing { background: #ff9800; color: #fff; }
+    .order-status.ready { background: #4caf50; color: #fff; }
+    .order-status.accepted { background: #2196f3; color: #fff; }
+    .order-status.sent { background: #b48e6a; color: #fff; }
+    .order-status.delivered { background: #4caf50; color: #fff; }
+    .order-info, .user-info { margin-bottom: 1rem; }
+    .order-items, .user-actions { margin-bottom: 1rem; }
+    .order-items ul { list-style: none; padding: 0; }
+    .order-items li { padding: 0.3rem 0; color: #ccc; }
+    .order-total { font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent-color); }
+    .order-actions, .user-actions { display: flex; gap: 1rem; }
+    .action-btn {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn.preparing { background: #ff9800; color: #fff; }
+    .action-btn.ready { background: #4caf50; color: #fff; }
+    .action-btn.make-admin { background: #4caf50; color: #fff; }
+    .action-btn.remove-admin { background: #f44336; color: #fff; }
+    .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .user-role { padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+    .user-role.admin { background: #4caf50; color: #fff; }
+    .user-role.user { background: #2196f3; color: #fff; }
+    @media (max-width: 900px) {
+      .dashboard-widgets { flex-direction: column; gap: 1.5rem; }
+      .dashboard-card { min-width: unset; }
+    }
+  </style>
+  <script type="module">
+    import { auth } from './firebase.js';
+    import { getDoc, doc, collection, query, orderBy, onSnapshot, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { db } from './firebase.js';
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) { window.location.href = '/'; return; }
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+        if (!userData || !userData.isAdmin) { window.location.href = '/'; return; }
+        initializeOrders();
+        initializeUsers();
+      } catch (error) { window.location.href = '/'; }
+    });
+    function initializeOrders() {
+      const ordersContainer = document.getElementById('orders-container');
+      if (!ordersContainer) return;
+      const ordersQuery = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+      onSnapshot(ordersQuery, (snapshot) => {
+        ordersContainer.innerHTML = '';
+        snapshot.forEach((doc) => {
+          const order = doc.data();
+          const orderElement = createOrderElement(doc.id, order);
+          ordersContainer.appendChild(orderElement);
+        });
+      });
+    }
+    async function initializeUsers() {
+      const usersContainer = document.getElementById('users-container');
+      if (!usersContainer) return;
+      try {
+        const usersSnapshot = await getDocs(collection(db, "users"));
+        usersContainer.innerHTML = '';
+        usersSnapshot.forEach((doc) => {
+          const userData = doc.data();
+          const userElement = createUserElement(doc.id, userData);
+          usersContainer.appendChild(userElement);
+        });
+      } catch (error) {
+        usersContainer.innerHTML = '<p style="color: #ff4444;">Erro ao carregar usuários</p>';
+      }
+    }
+    function createUserElement(userId, userData) {
+      const div = document.createElement('div');
+      div.className = 'user-card';
+      div.innerHTML = `
+        <div class="user-header">
+          <h3>${userData.displayName || 'Usuário sem nome'}</h3>
+          <span class="user-role ${userData.isAdmin ? 'admin' : 'user'}">
+            ${userData.isAdmin ? 'Administrador' : 'Usuário'}
+          </span>
+        </div>
+        <div class="user-info">
+          <p><strong>Email:</strong> ${userData.email || 'Não informado'}</p>
+          <p><strong>ID:</strong> ${userId}</p>
+          <p><strong>Data de Registro:</strong> ${userData.createdAt ? new Date(userData.createdAt).toLocaleString() : 'Não informada'}</p>
+        </div>
+        <div class="user-actions">
+          <button onclick="toggleAdminStatus('${userId}', ${!userData.isAdmin})" class="action-btn ${userData.isAdmin ? 'remove-admin' : 'make-admin'}">
+            ${userData.isAdmin ? 'Remover Admin' : 'Tornar Admin'}
+          </button>
+        </div>
+      `;
+      return div;
+    }
+    window.toggleAdminStatus = async function(userId, makeAdmin) {
+      try {
+        const userRef = doc(db, "users", userId);
+        await updateDoc(userRef, { isAdmin: makeAdmin });
+        initializeUsers();
+      } catch (error) {
+        alert("Erro ao atualizar status do usuário");
+      }
+    };
+    function createOrderElement(orderId, order) {
+      const div = document.createElement('div');
+      div.className = 'order-card';
+      
+      // Convert Firebase Timestamp to Date
+      let orderDate;
+      try {
+        if (order.createdAt?.toDate) {
+          orderDate = order.createdAt.toDate();
+        } else if (order.createdAt?.seconds) {
+          orderDate = new Date(order.createdAt.seconds * 1000 + (order.createdAt.nanoseconds || 0) / 1000000);
+        } else if (order.createdAt instanceof Date) {
+          orderDate = order.createdAt;
+        } else {
+          orderDate = new Date(order.createdAt);
+        }
+      } catch (error) {
+        console.error('Error converting date:', error);
+        orderDate = new Date(); // Fallback to current date if conversion fails
+      }
+
+      let actions = '';
+      if (order.type === 'delivery') {
+        if (order.status === 'pending') {
+          actions = `<button onclick="updateOrderStatus('${orderId}', 'accepted')" class="action-btn preparing">Aceitar Pedido</button>`;
+        } else if (order.status === 'accepted') {
+          actions = `<button onclick="updateOrderStatus('${orderId}', 'preparing')" class="action-btn preparing">Iniciar Preparo</button>`;
+        } else if (order.status === 'preparing') {
+          actions = `<button onclick="updateOrderStatus('${orderId}', 'sent')" class="action-btn ready">Marcar como Enviado</button>`;
+        } else if (order.status === 'sent') {
+          actions = `<button onclick="updateOrderStatus('${orderId}', 'delivered')" class="action-btn ready">Marcar como Entregue</button>`;
+        }
+      } else {
+        if (order.status === 'pending') {
+          actions = `<button onclick="updateOrderStatus('${orderId}', 'preparing')" class="action-btn preparing">Iniciar Preparo</button>`;
+        } else if (order.status === 'preparing') {
+          actions = `<button onclick="updateOrderStatus('${orderId}', 'ready')" class="action-btn ready">Finalizar Pedido</button>`;
+        }
+      }
+      
+      div.innerHTML = `
+        <div class="order-header">
+          <h3>Pedido #${orderId.slice(-6)}</h3>
+          <span class="order-status ${order.status}">${getStatusText(order.status, order.type)}</span>
+        </div>
+        <div class="order-info">
+          <p><strong>Cliente:</strong> ${order.userName}</p>
+          <p><strong>Tipo:</strong> ${order.type === 'mesa' ? 'Mesa' : 'Delivery'}</p>
+          <p><strong>Data:</strong> ${orderDate.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}</p>
+          ${order.type === 'delivery' ? `
+            <p><strong>Telefone:</strong> ${order.telefone || '-'}</p>
+            <p><strong>Endereço:</strong> ${order.endereco || '-'}</p>
+            <p><strong>Observação:</strong> ${order.observacao || '-'}</p>
+          ` : ''}
+        </div>
+        <div class="order-items">
+          <h4>Itens:</h4>
+          <ul>
+            ${order.items.map(item => `
+              <li>${item.name} - R$ ${Number(item.price).toFixed(2)}</li>
+            `).join('')}
+          </ul>
+        </div>
+        <div class="order-total">
+          <strong>Total: R$ ${Number(order.total).toFixed(2)}</strong>
+        </div>
+        <div class="order-actions">
+          ${actions}
+        </div>
+      `;
+      return div;
+    }
+    function getStatusText(status, type) {
+      if (type === 'delivery') {
+        const statusMap = {
+          'pending': 'Pendente',
+          'accepted': 'Pedido Aceito',
+          'preparing': 'Preparando',
+          'sent': 'Enviado',
+          'delivered': 'Entregue'
+        };
+        return statusMap[status] || status;
+      } else {
+        const statusMap = {
+          'pending': 'Pendente',
+          'preparing': 'Em Preparo',
+          'ready': 'Pronto',
+          'delivered': 'Entregue'
+        };
+        return statusMap[status] || status;
+      }
+    }
+    window.updateOrderStatus = async function(orderId, newStatus) {
+      try {
+        const orderRef = doc(db, "orders", orderId);
+        await updateDoc(orderRef, { status: newStatus });
+      } catch (error) {
+        alert("Erro ao atualizar status do pedido");
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="navbar-container"></div>
+  <main class="dashboard-main">
+    <button class="return-btn" onclick="window.location.href='/'">
+      <i class="fas fa-arrow-left"></i>
+      Voltar para a Página Principal
+    </button>
+    <div class="dashboard-header">
+      <span class="dashboard-title">Admin Dashboard</span>
+      <span class="dashboard-desc">Bem-vindo ao painel administrativo do BrewUp!<br>Aqui você pode gerenciar pedidos, usuários e mais.</span>
+    </div>
+    <div class="dashboard-widgets">
+      <div class="dashboard-card">
+        <h2><i class="fas fa-clipboard-list"></i> Pedidos</h2>
+        <div id="orders-container"></div>
+      </div>
+      <div class="dashboard-card">
+        <h2><i class="fas fa-users"></i> Usuários</h2>
+        <div id="users-container"></div>
+      </div>
+    </div>
+  </main>
+  <div id="footer-container"></div>
+</body>
+</html> 

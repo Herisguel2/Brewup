@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre - BrewUp</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../pages.css">
+  <link rel="stylesheet" href="sobre.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script type="module" src="../firebase.js"></script>
+  <script type="module" src="../auth-ui.js"></script>
+</head>
+<body>
+  <!-- Navbar will be loaded here -->
+  <div id="navbar-container"></div>
+
+  <main class="page-content">
+    <!-- Hero Section -->
+    <section class="about-hero">
+      <img src="../img/sobre.png" alt="BrewUp Coffee Shop" class="about-image">
+      <div class="hero-content">
+        <h1>Nossa História</h1>
+        <p>Desde 2025, a BrewUp tem sido um refúgio para amantes de café, oferecendo uma experiência única que combina tradição e inovação. Nossa jornada começou com uma paixão simples: criar o café perfeito que une pessoas e cria momentos memoráveis.</p>
+      </div>
+    </section>
+
+    <div class="about-content">
+      <div class="about-text">
+        <div class="about-mission reveal-on-scroll">
+          <div class="mission-header">
+            <i class="fas fa-bullseye"></i>
+            <h2>Nossa Missão</h2>
+          </div>
+          <div class="mission-content">
+            <p>Proporcionar experiências únicas através do café, conectando pessoas e momentos especiais em um ambiente acolhedor e moderno.</p>
+            <div class="mission-stats">
+              <div class="stat-item">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">Clientes Satisfeitos</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">25</span>
+                <span class="stat-label">Tipos de Café</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">12/7</span>
+                <span class="stat-label">Suporte</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="values-section reveal-on-scroll">
+          <div class="section-header">
+            <i class="fas fa-star"></i>
+            <h2>Nossos Valores</h2>
+          </div>
+          <div class="values-grid">
+            <div class="value-card">
+              <div class="value-icon">
+                <i class="fas fa-award"></i>
+              </div>
+              <h3>Qualidade</h3>
+              <p>Selecionamos os melhores grãos de café e preparamos cada bebida com cuidado e atenção aos detalhes.</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <h3>Sustentabilidade</h3>
+              <p>Comprometidos com práticas sustentáveis e responsabilidade social em todas as nossas operações.</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <h3>Inovação</h3>
+              <p>Sempre buscando novas formas de surpreender nossos clientes com sabores e experiências únicas.</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">
+                <i class="fas fa-crown"></i>
+              </div>
+              <h3>Excelência</h3>
+              <p>Dedicação ao atendimento excepcional e à satisfação total dos nossos clientes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-section">
+      <div class="section-header reveal-on-scroll">
+        <i class="fas fa-users"></i>
+        <h2>Nossa Equipe</h2>
+      </div>
+      <p class="team-intro reveal-on-scroll">Conheça os profissionais apaixonados que fazem a BrewUp acontecer todos os dias</p>
+      <div class="team-grid">
+        <div class="team-member reveal-on-scroll">
+          <div class="member-image">
+            <img src="../img/sobre.png" alt="Barista Principal">
+            <div class="member-social">
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Kaue Ruela</h3>
+            <p class="member-role"><i class="fas fa-mug-hot"></i> Barista Principal</p>
+            <p class="member-quote">"O café perfeito é aquele feito com paixão."</p>
+          </div>
+        </div>
+        <div class="team-member reveal-on-scroll">
+          <div class="member-image">
+            <img src="../img/daniel.jpg" alt="Chef de Cozinha">
+            <div class="member-social">
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Daniel Solda</h3>
+            <p class="member-role"><i class="fas fa-utensils"></i> Chef de Cozinha</p>
+            <p class="member-quote">"A gastronomia é uma forma de arte."</p>
+          </div>
+        </div>
+        <div class="team-member reveal-on-scroll">
+          <div class="member-image">
+            <img src="../img/nathan.jpg" alt="Gerente">
+            <div class="member-social">
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Nathan Hergesel</h3>
+            <p class="member-role"><i class="fas fa-chart-line"></i> Gerente</p>
+            <p class="member-quote">"Excelência em cada detalhe."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer will be loaded here -->
+  <div id="footer-container"></div>
+
+  <script type="module" src="../components/loadComponents.js"></script>
+  <script type="module" src="sobre.js"></script>
+</body>
+</html> 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewUp</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="auth-ui.js"></script>
+</head>
+<body>
+  <!-- Navbar will be loaded here -->
+  <div id="navbar-container"></div>
+
+  <main>
+    <section class="hero">
+      <video autoplay muted loop playsinline class="hero-video">
+        <source src="img/cafe.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-content">
+        <h1>Bem-vindo ao BrewUp</h1>
+        <p>Descubra o melhor café de todos os tempos</p>
+      </div>
+    </section>
+
+    <div class="grid-container">
+      <a href="menu/menu.html" class="grid-item menu">
+        <img src="img/menu.png" alt="Menu">
+        <h2>Menu</h2>
+      </a>
+      
+      <a href="delivery/delivery.html" class="grid-item delivery">
+        <img src="img/delivery.webp" alt="Delivery">
+        <h2>Delivery</h2>
+      </a>
+      
+      <a href="sobre/sobre.html" class="grid-item sobre">
+        <img src="img/sobre.png" alt="Sobre">
+        <h2>Sobre</h2>
+      </a>
+      
+      <a href="suporte/suporte.html" class="grid-item suporte">
+        <img src="img/suporte.jpg" alt="Suporte">
+        <h2>Suporte</h2>
+      </a>
+    </div>
+  </main>
+
+  <!-- Footer will be loaded here -->
+  <div id="footer-container"></div>
+
+  <script type="module" src="components/loadComponents.js"></script>
+</body>
+</html>
